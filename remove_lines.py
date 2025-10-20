@@ -31,3 +31,13 @@ for c in contours:
     area = cv2.contourArea(c)
     if aspect > 12 and 30 < area < 0.02 * binary.size:
         cv2.drawContours(mask_lines, [c], -1, 255, -1)
+
+mask_inv = cv2.bitwise_not(mask_lines)
+clean = cv2.bitwise_and(binary, mask_inv)
+
+clean = cv2.bitwise_not(clean)
+clean = cv2.medianBlur(clean, 3)
+clean = cv2.normalize(clean, None, 0, 255, cv2.NORM_MINMAX)
+
+cv2.imwrite(out, clean)
+print(f"Linhas removidas, carimbos e figuras preservados: {os.path.basename(out)}")
