@@ -10,3 +10,6 @@ def preprocess(path):
     blur = cv2.GaussianBlur(img, (3, 3), 0)
     _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return th
+
+if __name__ == "__main__":
+    preprocess(sys.argv[1])
