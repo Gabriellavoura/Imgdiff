@@ -31,3 +31,6 @@ for c in contours:
     area = cv2.contourArea(c)
     if aspect > 12 and 30 < area < 0.02 * binary.size:
         cv2.drawContours(mask_lines, [c], -1, 255, -1)
+
+mask_inv = cv2.bitwise_not(mask_lines)
+clean = cv2.bitwise_and(binary, mask_inv)
