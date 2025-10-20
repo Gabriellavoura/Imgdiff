@@ -34,3 +34,7 @@ for c in contours:
 
 mask_inv = cv2.bitwise_not(mask_lines)
 clean = cv2.bitwise_and(binary, mask_inv)
+
+clean = cv2.bitwise_not(clean)
+clean = cv2.medianBlur(clean, 3)
+clean = cv2.normalize(clean, None, 0, 255, cv2.NORM_MINMAX)
