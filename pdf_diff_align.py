@@ -11,5 +11,17 @@ def preprocess(path):
     _, th = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return th
 
+def align_ecc(a, b):
+    warp = np.eye(2, 3, dtype=np.float32)
+    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 1000, 1e-6)
+    try:
+        cc, warp = cv2.findTransformECC(a, b, warp, cv2.MOTION_AFFINE, criteria)
+        print(f"   ↳ Correlação ECC: {cc:.5f}")
+        return warp
+    except cv2.error as e:
+        print(f" Falha ECC: {e}")
+        return None
+
 if __name__ == "__main__":
     preprocess(sys.argv[1])
+
