@@ -22,3 +22,12 @@ v_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 80))
 detect_h = cv2.morphologyEx(binary, cv2.MORPH_OPEN, h_kernel)
 detect_v = cv2.morphologyEx(binary, cv2.MORPH_OPEN, v_kernel)
 lines = cv2.bitwise_or(detect_h, detect_v)
+
+contours, _ = cv2.findContours(lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+mask_lines = np.zeros_like(lines)
+for c in contours:
+    x, y, w, h = cv2.boundingRect(c)
+    aspect = max(w, h) / float(min(w, h) + 1)
+    area = cv2.contourArea(c)
+    if aspect > 12 and 30 < area < 0.02 * binary.size:
+        cv2.drawContours(mask_lines, [c], -1, 255, -1)
